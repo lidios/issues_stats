@@ -1,0 +1,4 @@
+*.pyc
+GithubCredentials.py
+/dist
+/MANIFEST
