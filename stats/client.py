@@ -11,6 +11,8 @@ repository_name = "webops"
 organization_name = "sambatech"
 # Average hour price in real
 average_hour_price = 110
+user = ""
+passwd  = ""
 
 #TODO
 # qual é o padrao da tag td para issues?
@@ -28,18 +30,33 @@ def dict_key_inc(_dict_, _key_,_inc_value_=1):
 label_list={}
 label_times={}
 
+
 from github import Github
+import os
+import sys
+import argparse
+
+parser=argparse.ArgumentParser(
+    description='''Script used to generate a WebOps Sprint Report''', epilog="""All that's well, ends well.""")
+parser.add_argument('--user', help='User to login on GitHub', required=True)
+parser.add_argument('--passwd', help='Password to login on GitHub', required=True)
+args=parser.parse_args()
+
+user = args.user
+passwd = args.passwd
 
 #TODO change it to oauth
-g = Github( "", "" )
+g = Github( user, passwd )
 
 org = g.get_organization(organization_name)
 repo = org.get_repo(repository_name)
 #Default sort is due date and direction desc
-ms = repo.get_milestones('closed');
+#ms = repo.get_milestones('closed');
+ms = repo.get_milestone(20)
 if ms is not None:
 	# get last closed milestone
-	m = ms[0];
+	#m = ms[0];
+	m = ms
 	print "Processing Issues to milestone "+ m.title 
 	#list issues
 	for issue in repo.get_issues(m, 'closed'):
