@@ -40,10 +40,12 @@ parser=argparse.ArgumentParser(
     description='''Script used to generate a WebOps Sprint Report''', epilog="""All that's well, ends well.""")
 parser.add_argument('--user', help='User to login on GitHub', required=True)
 parser.add_argument('--passwd', help='Password to login on GitHub', required=True)
+parser.add_argument('--milestone', type=int, help='Milestone to be Analized', required=True)
 args=parser.parse_args()
 
 user = args.user
 passwd = args.passwd
+milestone = args.milestone
 
 #TODO change it to oauth
 g = Github( user, passwd )
@@ -52,7 +54,7 @@ org = g.get_organization(organization_name)
 repo = org.get_repo(repository_name)
 #Default sort is due date and direction desc
 #ms = repo.get_milestones('closed');
-ms = repo.get_milestone(20)
+ms = repo.get_milestone(milestone)
 if ms is not None:
 	# get last closed milestone
 	#m = ms[0];
