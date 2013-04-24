@@ -6,14 +6,12 @@
 
 # Interessing TAGs
 #TODO to parametrize
-tags_to_sumarize_hours = ['Impediment', 'Incident', 'Meeting', 'Deploy']
-tags_to_print = ['Impediment', 'Incident', 'Meeting', 'Deploy', 'Task']
+tags_to_sumarize_hours = ['Impediment', 'inc: Reativo' , 'inc: Proativo', 'Meeting', 'Deploy']
+tags_to_print = ['Impediment', 'inc: Reativo' , 'inc: Proativo', 'Meeting', 'Deploy', 'Task']
 repository_name = "webops"
 organization_name = "sambatech"
 # Average hour price in real
 average_hour_price = 110
-user = ""
-passwd  = ""
 
 #TODO
 # qual é o padrao da tag td para issues?
@@ -30,9 +28,11 @@ def dict_key_inc(_dict_, _key_,_inc_value_=1):
 # output variables
 label_list={}
 label_times={}
-
+inc_reativos={}
+inc_proativos={}
 
 from github import Github
+
 import os
 import sys
 import argparse
@@ -48,6 +48,9 @@ user = args.user
 passwd = args.passwd
 milestone = args.milestone
 useragent = "Mozilla/5.0 (Windows; U; Windows NT 5.1; de; rv:1.9.2.3) Gecko/20100401 Firefox/3.6.3"
+reativo = "inc: Reativo"
+proativo = "inc: Proativo"
+
 
 #TODO change it to oauth
 g = Github( login_or_token=user, password=passwd, user_agent=useragent )
@@ -75,6 +78,18 @@ if ms is not None:
 			if l.name in tags_to_sumarize_hours:
 				should_process_time = True
 				label_key = l.name;
+			if l.name == reativo:
+			  inc_labels_name = ""
+			  for l1 in  issue.labels:
+			    if l1.name != reativo and l1.name != proativo:
+			  	  dict_key_inc(inc_reativos, l1.name)
+
+			if l.name == proativo:
+			  inc_labels_name = ""
+			  for l1 in  issue.labels:
+			    if l1.name != reativo and l1.name != proativo:
+			  	  dict_key_inc(inc_proativos, l1.name)
+
    		if should_process_time:
    			#print label_key + " " + str(issue.number)
    			should_process_time = False
@@ -104,6 +119,16 @@ for k in label_list.keys():
 	if k in tags_to_print:
 	  number_of_issues = label_list.get(k)
 	  print "* " + k + " - " + str(number_of_issues);
+
+print "\n........... Incidentes Reativos e Proativos ..........."
+print "* Reativos"
+for k in inc_reativos.keys():
+	r = inc_reativos.get(k)
+	print "  * " + k + " - " + str(r);
+print "* Proativos"
+for k in inc_proativos.keys():
+	p = inc_proativos.get(k)
+	print "  * " + k + " - " + str(p);
 
 print "\n........... Time Spent ...........\n"
 for k in label_times.keys():
