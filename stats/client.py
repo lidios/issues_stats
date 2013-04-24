@@ -6,7 +6,8 @@
 
 # Interessing TAGs
 #TODO to parametrize
-tags_to_sumarize_hours = ['Impediment', 'Incident', 'Meeting', 'Deploy'];
+tags_to_sumarize_hours = ['Impediment', 'Incident', 'Meeting', 'Deploy']
+tags_to_print = ['Impediment', 'Incident', 'Meeting', 'Deploy', 'Task']
 repository_name = "webops"
 organization_name = "sambatech"
 # Average hour price in real
@@ -46,9 +47,10 @@ args=parser.parse_args()
 user = args.user
 passwd = args.passwd
 milestone = args.milestone
+useragent = "Mozilla/5.0 (Windows; U; Windows NT 5.1; de; rv:1.9.2.3) Gecko/20100401 Firefox/3.6.3"
 
 #TODO change it to oauth
-g = Github( user, passwd )
+g = Github( login_or_token=user, password=passwd, user_agent=useragent )
 
 org = g.get_organization(organization_name)
 repo = org.get_repo(repository_name)
@@ -99,8 +101,9 @@ if ms is not None:
 print "=========== Sprint Statistics ==========="				
 print "\n........... Task Summary ...........\n"
 for k in label_list.keys():
-	number_of_issues = label_list.get(k)
-	print "* " + k + " - " + str(number_of_issues);
+	if k in tags_to_print:
+	  number_of_issues = label_list.get(k)
+	  print "* " + k + " - " + str(number_of_issues);
 
 print "\n........... Time Spent ...........\n"
 for k in label_times.keys():
