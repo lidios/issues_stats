@@ -8,8 +8,8 @@
 #TODO to parametrize
 tags_to_sumarize_hours = ['Impediment', 'inc: Reativo' , 'inc: Proativo', 'Meeting', 'Deploy']
 tags_to_print = ['Impediment', 'inc: Reativo' , 'inc: Proativo', 'Meeting', 'Deploy', 'Task']
-repository_name = "webops"
-organization_name = "sambatech"
+repository_name = "sambatech/webops"
+
 # Average hour price in real
 average_hour_price = 110
 
@@ -55,8 +55,7 @@ proativo = "inc: Proativo"
 #TODO change it to oauth
 g = Github( login_or_token=user, password=passwd, user_agent=useragent )
 
-org = g.get_organization(organization_name)
-repo = org.get_repo(repository_name)
+repo = g.get_repo(repository_name)
 #Default sort is due date and direction desc
 #ms = repo.get_milestones('closed');
 ms = repo.get_milestone(milestone)
