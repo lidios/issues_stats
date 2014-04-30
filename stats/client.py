@@ -41,12 +41,14 @@ parser=argparse.ArgumentParser(
     description='''Script used to generate a WebOps Sprint Report''', epilog="""All that's well, ends well.""")
 parser.add_argument('--user', help='User to login on GitHub', required=True)
 parser.add_argument('--passwd', help='Password to login on GitHub', required=True)
-parser.add_argument('--milestone', type=int, help='Milestone to be Analized', required=True)
+parser.add_argument('--milestone', type=int, help='Milestone to be analyzed', required=True)
+parser.add_argument('--repo', help='Repository to be analyzed', required=True)
 args=parser.parse_args()
 
 user = args.user
 passwd = args.passwd
 milestone = args.milestone
+repository_name = args.repo
 useragent = "Mozilla/5.0 (Windows; U; Windows NT 5.1; de; rv:1.9.2.3) Gecko/20100401 Firefox/3.6.3"
 reativo = "inc: Reativo"
 proativo = "inc: Proativo"
