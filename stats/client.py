@@ -8,7 +8,6 @@
 #TODO to parametrize
 tags_to_sumarize_hours = ['Impediment', 'inc: Reativo' , 'inc: Proativo', 'Meeting', 'Deploy']
 tags_to_print = ['Impediment', 'inc: Reativo' , 'inc: Proativo', 'Meeting', 'Deploy', 'Task']
-repository_name = "sambatech/webops"
 
 # Average hour price in real
 average_hour_price = 110
