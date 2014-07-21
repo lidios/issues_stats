@@ -8,8 +8,7 @@
 #TODO to parametrize
 tags_to_sumarize_hours = ['Impediment', 'inc: Reativo' , 'inc: Proativo', 'Meeting', 'Deploy']
 tags_to_print = ['Impediment', 'inc: Reativo' , 'inc: Proativo', 'Meeting', 'Deploy', 'Task']
-repository_name = "webops"
-organization_name = "sambatech"
+
 # Average hour price in real
 average_hour_price = 110
 
@@ -41,14 +40,15 @@ parser=argparse.ArgumentParser(
     description='''Script used to generate a WebOps Sprint Report''', epilog="""All that's well, ends well.""")
 parser.add_argument('--user', help='User to login on GitHub', required=True)
 parser.add_argument('--passwd', help='Password to login on GitHub', required=True)
-#parser.add_argument('--milestone', type=int, help='Milestone to be Analized, sepparated by comma', required=True)
-parser.add_argument('--milestones', help='Milestone to be Analized', required=True)
+parser.add_argument('--milestones', help='Milestone to be Analized, sepparated by comma', required=True)
+parser.add_argument('--repo', help='Repository to be analyzed', required=True)
+
 args=parser.parse_args()
 
 user = args.user
 passwd = args.passwd
-#milestone = args.milestone
 milestones = args.milestones.split(',')
+repository_name = args.repo
 useragent = "Mozilla/5.0 (Windows; U; Windows NT 5.1; de; rv:1.9.2.3) Gecko/20100401 Firefox/3.6.3"
 reativo = "inc: Reativo"
 proativo = "inc: Proativo"
@@ -57,8 +57,7 @@ proativo = "inc: Proativo"
 #TODO change it to oauth
 g = Github( login_or_token=user, password=passwd, user_agent=useragent )
 
-org = g.get_organization(organization_name)
-repo = org.get_repo(repository_name)
+repo = g.get_repo(repository_name)
 #Default sort is due date and direction desc
 #ms = repo.get_milestones('closed');
 
