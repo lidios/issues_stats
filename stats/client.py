@@ -85,7 +85,7 @@ def print_tasks(tasks_objects, closed=False):
 		for l in i.labels:
 			task_tags += "[%s] " % l.name
 
-		print " - %s %s %s" % (closed_symbol, task_tags, i.title)
+		print " - %s %s %s #%s" % (closed_symbol, task_tags, i.title, i.number)
 
 
 ### Process tasks summary
