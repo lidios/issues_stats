@@ -55,7 +55,6 @@ useragent = "Mozilla/5.0 (Windows; U; Windows NT 5.1; de; rv:1.9.2.3) Gecko/2010
 reativo = "inc: Reativo"
 proativo = "inc: Proativo"
 
-
 #TODO change it to oauth
 g = Github( login_or_token=user, password=passwd, user_agent=useragent )
 
@@ -65,15 +64,61 @@ repo = g.get_repo(repository_name)
 
 issues_time_dict = {}
 
+milestones_object_list = []
 for milestone in milestones:
 	milestone = int(milestone)
 	ms = repo.get_milestone(milestone)
 	if ms is not None:
-		# get last closed milestone
-		#m = ms[0];
+		milestones_object_list.append( ms )
+
+def print_tasks(tasks_objects, closed=False):
+	if not tasks_objects:
+		return
+
+	if closed:
+		closed_symbol = '[x]'
+	else:
+		closed_symbol = '[ ]'
+
+	for i in tasks_objects:
+		task_tags = " "
+		for l in i.labels:
+			task_tags += "[%s] " % l.name
+
+		print " - %s %s %s #%s" % (closed_symbol, task_tags, i.title, i.number)
+
+
+### Process tasks summary
+try: 
+	task_label = repo.get_label('Task')
+except:
+	task_label = None
+
+if task_label:
+
+	print "=========== Milestone Tasks ==========="
+	for ms in milestones_object_list:
+		print "--- Processing milestone: %s - %s ---" % (ms.number, ms.title)
+	
+	print "\n........... Completed tasks ...........\n"
+	for ms in milestones_object_list:
+		closed_tasks = repo.get_issues(ms, state='closed', sort='title', labels=[task_label])
+		print_tasks(closed_tasks, True)
+
+	print "\n........... Open tasks ...........\n"
+	for ms in milestones_object_list:
+		open_tasks = repo.get_issues(ms, state='open', sort='title', labels=[task_label])
+		print_tasks(open_tasks, False)
+
+
+### Process statistics
+print "\n\n=========== Milestone(s) Statistics ==========="
+for ms in milestones_object_list:
+	if ms is not None:
 		m = ms
-		print "Processing Issues to milestone "+ m.title 
-		#list issues
+
+		print "--- Processing milestone: %s - %s ---" % (ms.number, ms.title)
+
 		for issue in repo.get_issues(m, 'closed'):
 			should_process_time = False;
 			label_key = None
@@ -98,6 +143,7 @@ for milestone in milestones:
 				  for l1 in  issue.labels:
 				    if l1.name != reativo and l1.name != proativo:
 				  	  dict_key_inc(inc_proativos, l1.name)
+
 
 	   		if should_process_time:
 	   			total_issue_time = 0
@@ -127,7 +173,7 @@ for milestone in milestones:
 
 				dict_key_inc(issues_time_dict, issue.title, total_issue_time)
 
-print "=========== Milestone(s) Statistics ==========="				
+				
 print "\n........... Task Summary ...........\n"
 for k in label_list.keys():
 	if k in tags_to_print:
@@ -153,6 +199,7 @@ print "\n........... $$ Spent ...........\n"
 for k in label_times.keys():
 	total_time = label_times.get(k)
 	print "* " + k + " - R$ " + str(int(total_time)*average_hour_price);
+
 
 print "\n........... Top time consuming issues ...........\n"
 import operator
