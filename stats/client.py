@@ -171,7 +171,8 @@ for ms in milestones_object_list:
 								total_issue_time += float(t)/60
 								#print label_key+ " - " + issue.title +"("+str(issue.number)+  ") spent " + str(float(t)/60) +  " hours to be solved"
 
-				dict_key_inc(issues_time_dict, issue.title, total_issue_time)
+				issue_name = "%s #%s" % (issue.title, issue.number)
+				dict_key_inc(issues_time_dict, issue_name, total_issue_time)
 
 				
 print "\n........... Task Summary ...........\n"
